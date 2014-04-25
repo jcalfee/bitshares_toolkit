@@ -8,14 +8,14 @@
 This cache is built by scanning the blockchain and processing pending transactions (currently only processes blockchain transactions, pending transactions support needs to be added). Is there anything special that needs to be done for pending transactions? Should there be extra info in the transaction_state for them (maybe just the -1 to indicate not in a block yet).
 
 ## Compute Confirmed Balance
-Transactions are considered fully confirmed if 51% of the delegates have confirmed the block by issuing a block that incorporates it. Currently this is computed on the fly from the transaction cache. Note: currently code considers all transactions in a block to be confirmed.
+Transactions are considered fully confirmed if 51% of the delegates have confirmed the transaction by issuing a block that incorporates it. Currently this is computed on the fly from the transaction cache. Note: currently code considers all transactions in a block to be confirmed.
 
 ## Compute Unconfirmed Balance
 Transactions that are not yet fully confirmed are kept in a separate wallet balance (one for each asset type) until they have been fully confirmed. Currently this is computed on the fly from the transaction cache (well, not actually computed at all yet, this needs to be implemented).
 
 ## Create transactions from user accounts
 - Pick an appropriate set of unspent outputs to act as inputs to the transaction (see pseudocode for description of current algorithm for selecting this set).
-- Transfer any overage to a “change” account. Create a new change account for each transaction and ouptut the overage to this account. This implies the user may end up holding a substantial and ever-growing number of keys (see Change addresses discussion).
+- Transfer any overage to a ï¿½changeï¿½ account. Create a new change account for each transaction and ouptut the overage to this account. This implies the user may end up holding a substantial and ever-growing number of keys (see Change addresses discussion).
 - Compute any fees required for the transaction and add additional unspent outputs as inputs if required (which changes the fee required again and can in turn require additional inputs...). The minimum fee for a valid transaction is the next_fee (computed by blockchain code, see blockchain.dox for details) * transaction_size_in_bytes. See "Transaction Fee Issues" for potential problems with this approach to fee calculation for the transaction.
 - If no change required (an unlikely scenario), remove the change output. Probably we should remove the key we created as well in this case.
 - Randomize the ordering of the outputs //TODO
@@ -41,7 +41,7 @@ It's possible that a wallet may compute a transaction without having seen the "l
 - Process each transaction as  unconfirmed (shows in unconfirmed balance and transaction shown as unconfirmed).
 
 ## Steps in processing a basic currency transaction
-- If any of the inputs to the transaction are from accounts we control, decrease the wallet balance by the amount in those accounts (accounts are fully spent by a transaction and any overage is sent to a “change” account as an output of the transaction)
+- If any of the inputs to the transaction are from accounts we control, decrease the wallet balance by the amount in those accounts (accounts are fully spent by a transaction and any overage is sent to a ï¿½changeï¿½ account as an output of the transaction)
 - If any of the outputs to the transaction are to accounts we control, increase the wallet balance by the amounts transferred to those accounts)
 
 Vote down delegates when there is a valid transaction not getting included in the blockchain for more than one block from the time you receive it. For now we will just log this as a diagnostic aid.
@@ -55,7 +55,7 @@ Vote down delegates when there is a valid transaction not getting included in th
 - List of pending transactions
 - List of named receiving addresses (for incoming transfers)
 - List of named addresses to send to (address book for outgoing transfers)
-- Add number of confirmations and “delegate voted for” to transaction display
+- Add number of confirmations and ï¿½delegate voted forï¿½ to transaction display
 - Report the total number of transactions (confirmed and unconfirmed) that affect the user's wallet (size of transaction cache).
 
 ## Importable/Exportable information
